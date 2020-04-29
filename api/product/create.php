@@ -31,6 +31,7 @@ $product->category_id = $data->category_id;
 $product->created = $data->created;
 $product->modified = $data->modified;
 
+// Success or error message
 if($product->create()) {
     echo json_encode(
         array("message" => "Product created")
