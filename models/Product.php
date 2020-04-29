@@ -130,4 +130,51 @@ class Product {
 
         return false;
     }
+
+    // Update product
+    public function update() {
+        // Create query
+        $query = "UPDATE ". $this->table ."
+            SET
+                name = :name,
+                description = :description,
+                price = :price,
+                category_id = :category_id,
+                created = :created,
+                modified = :modified
+            WHERE
+                id = :id
+        ";
+
+        // Prepared statement
+        $stmt = $this->conn->prepare($query);
+
+        // Clean data
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->price = htmlspecialchars(strip_tags($this->price));
+        $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+        $this->created = htmlspecialchars(strip_tags($this->created));
+        $this->modified = htmlspecialchars(strip_tags($this->modified));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind data
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":price", $this->price);
+        $stmt->bindParam(":category_id", $this->category_id);
+        $stmt->bindParam(":created", $this->created);
+        $stmt->bindParam(":modified", $this->modified);
+        $stmt->bindParam(":id", $this->id);
+
+        // Execure query
+        if($stmt->execute()) {
+            return true;
+        }
+
+        // Print error if something goes wrong
+        printf("Error: %s.\n", $stmt->error);
+
+        return false;
+    }
 }
